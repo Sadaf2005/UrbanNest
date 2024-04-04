@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Link,  useNavigate} from 'react-router-dom'
 // import SignIn from './Pages/SignIn.js';
+import OAuth from '../Components/OAuth.jsx';
 
 export default function SignUp() {
   const [formData, setFormData]= useState({});
@@ -13,7 +14,7 @@ export default function SignUp() {
       [e.target.id]: e.target.value,
     });
   };
-  const handleSubmit =async (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -24,6 +25,9 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
+      if (!res.ok) {
+        throw new Error('Something went wrong');
+      }
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
@@ -50,14 +54,15 @@ export default function SignUp() {
         <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg 
         uppercase hover:opacity-95 disabled:opacity-80'>
          {loading ? 'Loading...':'Sign Up'}</button>
+         <OAuth/>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Have an account?</p>
-        <Link to="{/sign-in}">
+        <Link to={'/sign-in'}>
           <span className='text-blue-700'>SignIn</span>
           </Link>
       </div>
-      {error && <p className='text-red-500 mt-5'>error</p>}
+      {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   )
 }
