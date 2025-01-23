@@ -36,11 +36,10 @@ app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "/client/dist")));
+app.use(express.static(path.join(__dirname, '/client/dist')));
 
-// Handle React routing, return all requests to React app
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 // Error handling middleware
