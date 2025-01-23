@@ -105,9 +105,9 @@ export default function Search() {
  };
 
  const onShowMoreClick = async()=>{
-    const numberOfListings = Listings.length;
+    const numberOfListings = listings.length;
     const startIndex = numberOfListings;
-    const urlParams = new URLSearchParams(loaction.search);
+    const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex',startIndex);
     const searchQuery = urlParams.toString();
     const res = await fetch(`/api/listing/get?${searchQuery}`);
@@ -115,7 +115,7 @@ export default function Search() {
     if(data.length <9){
         setShowMore(false);
     }
-    setListings([...Listings,...data]);
+    setListings([...listings,...data]);
  };
 
   return (
@@ -198,13 +198,14 @@ export default function Search() {
 
                 )
             }
-            {showMore &&(
-                <button
-                onClick={onShowMoreClick} 
-                className='text-green-700 hover:underline p-7'>
-                    Show more
-                </button>
-            )}
+           {showMore && (
+            <button
+              onClick={onShowMoreClick}
+              className='text-green-700 hover:underline p-7 text-center w-full'
+            >
+              Show more
+            </button>
+          )}
         
      </div>
     </div>

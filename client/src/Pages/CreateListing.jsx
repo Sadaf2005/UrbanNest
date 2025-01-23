@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import {  useState } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import {useSelector} from 'react-redux';
@@ -18,7 +18,7 @@ export default function CreateListing() {
         bedrooms:1,
         bathrooms:1,
         regularPrice:50,
-        discountPrice:50,
+        discountPrice:0,
         offer:false,
         parking:false,
         furnished:false,
@@ -28,7 +28,8 @@ export default function CreateListing() {
     const [loading,setLoading]=useState(false);
     const [uploading,setUploading]= useState(false);
 console.log(formData);
-    const handleImageSubmit = (e) => {
+
+    const handleImageSubmit = () => {
         if (files.length > 0 && files.length+ formData.imageUrls.length< 7) {
             setUploading(true);
             setImageUploadError(false);
@@ -41,7 +42,7 @@ console.log(formData);
                 });
                 setImageUploadError(false);
                 setUploading(false);
-            }).catch((err)=>{
+            }).catch(() => {
                 setImageUploadError('Image upload failed (2 mb max oer Image)');
                 setUploading(false);
             });
@@ -83,6 +84,7 @@ console.log(formData);
             imageUrls: formData.imageUrls.filter((_,i)=> i!==index),
         });
     };
+   
     const handleChange = (e) => {
         if (e.target.id === 'sale' || e.target.id === 'rent') {
           setFormData({
@@ -223,7 +225,9 @@ console.log(formData);
               />
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
-                <span className='text-xs'>($ / month)</span>
+                {formData.type === 'rent' && (
+                  <span className='text-xs'>($ / month)</span>
+                )}
                             </div>
                         </div>
                         {formData.offer && (
@@ -240,7 +244,9 @@ console.log(formData);
                 />
                 <div className='flex flex-col items-center'>
                   <p>Discounted price</p>
-                  <span className='text-xs'>($ / month)</span>
+                  {formData.type === 'rent' && (
+                    <span className='text-xs'>($ / month)</span>
+                  )}
                 </div>
               </div>  )}
                     </div>
@@ -254,7 +260,17 @@ console.log(formData);
                         <input onChange={(e) => setFiles(e.target.files)}
                             className='p-3 border border-gray-300 rounded w-full' type="file" id='images'
                             accept='images/*' multiple  />
-                        <button onClick={handleImageSubmit} disabled={uploading} className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'>{uploading ?'Uploading...':'Upload'}</button>
+                        {/* <button onClick={handleImageSubmit} disabled={uploading} className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'>{uploading ?'Uploading...':'Upload'}</button> */}
+                        <button
+                              onClick={(e) => { 
+                                e.preventDefault();  // Prevents form submission
+                                handleImageSubmit();
+                              }}
+                              disabled={uploading}
+                              className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80'
+                            >
+                              {uploading ? 'Uploading...' : 'Upload'}
+                      </button>
                     </div>
                     <p className='text-red-700'>{imageUploadError && imageUploadError}</p>
                     {formData.imageUrls.length > 0 &&
@@ -278,7 +294,7 @@ console.log(formData);
               </div>
             ))}
           <button disabled={loading || uploading} className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
-           {loading? 'Creating...':'Create Listing'}
+           {loading? 'Updating...':'Update Listing'}
           </button>
           {error && <p className='text-red-700'>{error}</p>}
         </div>

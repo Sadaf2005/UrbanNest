@@ -21,51 +21,70 @@ import { Link } from 'react-router-dom';
 
 export default function Profile() {
   const fileRef = useRef(null);
-  const {currentUser,loading,error} = useSelector((state)=> state.user);
-  const [file,setFile] = useState(undefined);
-  const [filePerc,setFilePerc] = useState(0);
-  const [fileUploadError,setFileUploadError]= useState(false);
-  const [formData,setFormData] = useState({});
+  const { currentUser, loading } = useSelector((state) => state.user); // Removed unused 'error'
+  const [file, setFile] = useState(undefined);
+  const [filePerc, setFilePerc] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
-  const [updateSuccess,setUpdateSuccess] = useState(false);
-  const [showListingsError,setShowListingsError] = useState(false);
-  const [userListings,setUserListings]=useState([]);
-  // console.log(formData);
-  // console.log(filePerc);
-  // console.log(file);
-  useEffect(()=>{
-    if(file){
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
+
+  useEffect(() => {
+    if (file) {
       handleFileUpload(file);
     }
-  },[file]);
-  
-  const handleFileUpload=() =>{
+  }, [file]);
+
+  // const handleFileUpload = (file) => {
+  //   const storage = getStorage(app);
+  //   const fileName = new Date().getTime() + file.name;
+  //   const storageRef = ref(storage, fileName);
+  //   const uploadTask = uploadBytesResumable(storageRef, file);
+
+  //   uploadTask.on(
+  //     'state_changed',
+  //     (snapshot) => {
+  //       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       setFilePerc(Math.round(progress));
+  //     },
+  //     (error) => {
+  //       setFileUploadError(true);
+  //     },
+  //     () => {
+  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //         setFormData({ ...formData, avatar: downloadURL });
+  //       });
+  //     }
+  //   );
+  // };
+  const handleFileUpload = (file) => {
     const storage = getStorage(app);
-    const fileName = new Date().getTime()+ file.name;
-    const storageRef = ref(storage,fileName);
-    const uploadTask = uploadBytesResumable(storageRef,file);
-
-    uploadTask.on('State_changed',
-        (snapshot)=>{
-          const progress=(snapshot.bytesTransferred /
-        snapshot.totalBytes)*100;
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+  
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
-        },
-  // );
-  (error)=>{
-    setFileUploadError(true);
-  },
-  ()=>{
-    getDownloadURL(uploadTask.snapshot.ref).then
-    ((downloadURL)=>{
-      setFormData({...formData,avatar :downloadURL});
-    });
-
-  }
-);
+      },
+      () => {
+        setFileUploadError(true); // Removed 'error' parameter
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData({ ...formData, avatar: downloadURL });
+        });
+      }
+    );
   };
-  const handleChange = (e)=>{
-    setFormData({...formData,[e.target.id]:e.target.value});
+  
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -91,27 +110,27 @@ export default function Profile() {
       dispatch(updateUserFailure(error.message));
     }
   };
-  const handleDeleteUser=async()=>{
+
+  const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`,{
-        method:'DELETE',
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
       });
       const data = await res.json();
-      if(data.success ===false){
+      if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
       }
       dispatch(deleteUserSuccess(data));
-      
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
   };
-  const handleSignOut = async () => {
 
+  const handleSignOut = async () => {
     try {
-      dispatch(signOutUserStart())
+      dispatch(signOutUserStart());
       const res = await fetch('/api/auth/signout');
       const data = await res.json();
       if (data.success === false) {
@@ -120,7 +139,7 @@ export default function Profile() {
       }
       dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFailure(data.message));
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -139,7 +158,7 @@ export default function Profile() {
       setShowListingsError(true);
     }
   };
-  
+
   const handleListingDelete = async (listingId) => {
     try {
       const res = await fetch(`/api/listing/delete/${listingId}`, {
@@ -151,9 +170,7 @@ export default function Profile() {
         return;
       }
 
-      setUserListings((prev) =>
-        prev.filter((listing) => listing._id !== listingId)
-      );
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
     } catch (error) {
       console.log(error.message);
     }
