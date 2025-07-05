@@ -78,7 +78,68 @@ Edit
 
 ### 1. Clone the Repository
 ```bash
-Pastegit clone https://github.com/Sadaf2005/UrbanNest.git cd UrbanNest 2. Install Dependencies Backend: bash Copy Edit cd server npm install Frontend: bash Copy Edit cd ../client npm install 3. Setup Environment Variables Backend (server/.env) ini Copy Edit MONGO\\\_URI=your\\\_mongodb\\\_uri JWT\\\_SECRET=your\\\_jwt\\\_secret Frontend (client/.env) ini Copy Edit VITE\\\_FIREBASE\\\_API\\\_KEY=your\\\_firebase\\\_api\\\_key VITE\\\_FIREBASE\\\_AUTH\\\_DOMAIN=your\\\_project\\\_id.firebaseapp.com VITE\\\_FIREBASE\\\_PROJECT\\\_ID=your\\\_project\\\_id VITE\\\_FIREBASE\\\_STORAGE\\\_BUCKET=your\\\_bucket VITE\\\_FIREBASE\\\_MESSAGING\\\_SENDER\\\_ID=your\\\_sender\\\_id VITE\\\_FIREBASE\\\_APP\\\_ID=your\\\_app\\\_id 4. Run the App Backend: bash Copy Edit cd server npm start Frontend: bash Copy Edit cd ../client npm run dev 📸 Screenshots Homepage Listing Details Dashboard 🛡️ Authentication Flow Google Sign-In via Firebase JWT issued by backend after initial login All protected routes verify JWT token Tokens stored securely in localStorage 📌 Future Enhancements Payment gateway integration for property booking your rich text content here. You can paste directly from Word or other rich text sources.
+- git clone https://github.com/Sadaf2005/UrbanNest.git
+- cd UrbanNest
+
+### 2. Install Dependencies
+Backend:
+```bash
+Copy
+Edit
+cd server
+npm install
+Frontend:
+bash
+Copy
+Edit
+cd ../client
+npm install
+### 3. Setup Environment Variables
+Backend (server/.env)
+ini
+Copy
+Edit
+- MONGO_URI=your_mongodb_uri
+- JWT_SECRET=your_jwt_secret
+-Frontend (client/.env)
+init
+Copy
+Edit
+-VITE_FIREBASE_API_KEY=your_firebase_api_key
+-VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+-VITE_FIREBASE_PROJECT_ID=your_project_id
+-VITE_FIREBASE_STORAGE_BUCKET=your_bucket
+-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+-VITE_FIREBASE_APP_ID=your_app_id
+### 4. Run the App
+Backend:
+bash
+Copy
+Edit
+- cd server
+-npm start
+Frontend:
+bash
+Copy
+Edit
+-cd ../client
+-npm run dev
+📸 Screenshots
+Homepage	Listing Details	Dashboard
+
+🛡️ Authentication Flow
+Google Sign-In via Firebase
+
+JWT issued by backend after initial login
+
+All protected routes verify JWT token
+
+Tokens stored securely in localStorage
+
+📌 Future Enhancements
+Payment gateway integration for property booking
+
+coner this part of document into markdown 
 
 Admin dashboard for analytics and user control
 
